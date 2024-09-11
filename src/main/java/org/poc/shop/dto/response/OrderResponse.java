@@ -21,11 +21,8 @@ import java.util.UUID;
 public class OrderResponse {
 
     private UUID id;
-
     private OrderStatus status;
-
-    private Date createdAt ;
-
+    private Date createdAt;
     private BigDecimal distance;
 
 }

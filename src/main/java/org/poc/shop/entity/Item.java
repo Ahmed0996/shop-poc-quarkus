@@ -32,7 +32,7 @@ public class Item extends PanacheEntityBase {
     private BigInteger quantity;
     private BigDecimal price;
 
-    @ManyToMany(mappedBy = "items" , fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "items", fetch = FetchType.EAGER)
     @JsonBackReference
     private List<Cart> cart;
 

@@ -42,7 +42,7 @@ public class CartService {
 
         return cartRepository.findById(id);
     }
-    //
+
 
     public Cart createCart(CartRequest cartRequest) {
 
@@ -54,12 +54,12 @@ public class CartService {
         Cart existingCart = findExistingCart(client, shop);
 
         if (existingCart != null) {
-            logger.info("Cart already exists for client: {} " , client);
+            logger.info("Cart already exists for client: {} ", client);
             updateCartItems(existingCart, cartRequest);
             cartRepository.persist(existingCart);
             return existingCart;
         } else {
-            logger.info("Creating new cart for client: {} " , client);
+            logger.info("Creating new cart for client: {} ", client);
             Cart newCart = new Cart(client, shop, retrieveItems(cartRequest, new ArrayList<>()));
             cartRepository.persist(newCart);
             return newCart;
@@ -87,8 +87,8 @@ public class CartService {
     private void validateClientAddress(Client client) {
         if (client.getAddresses() == null || client.getAddresses().isEmpty()) {
             ClientAddress clientAddress = new ClientAddress();
-            List<ClientAddress> clientAddresses = clientAddress.findAll().list() ;
-           client.getAddresses().add(clientAddresses.getFirst()) ;
+            List<ClientAddress> clientAddresses = clientAddress.findAll().list();
+            client.getAddresses().add(clientAddresses.getFirst());
         }
     }
 
@@ -108,15 +108,15 @@ public class CartService {
         }
 
         // Add new items from the request to the cart
-        List<Item> retrievedItems = retrieveItems(cartRequest, cartItems) ;
-        for(Item item : retrievedItems) {
-            boolean exist = false ;
-            for(Item item2 : cartItems){
-                if(item.getId().equals(item2.getId())) {
-                    exist = true ;
+        List<Item> retrievedItems = retrieveItems(cartRequest, cartItems);
+        for (Item item : retrievedItems) {
+            boolean exist = false;
+            for (Item item2 : cartItems) {
+                if (item.getId().equals(item2.getId())) {
+                    exist = true;
                 }
             }
-            if(!exist) {
+            if (!exist) {
                 cartItems.add(item);
             }
         }
@@ -126,7 +126,7 @@ public class CartService {
                 if (item.getId().equals(itemRequest.getItemId())) {
                     logger.info("Item already exists in cart, updating quantity");
                     item.setQuantity(item.getQuantity().add(itemRequest.getQuantity()));
-                    logger.info("Updated item quantity: {}" , item.getQuantity());
+                    logger.info("Updated item quantity: {}", item.getQuantity());
                 }
             }
         }
@@ -147,7 +147,6 @@ public class CartService {
         }
         return cartItems;
     }
-
 
 
 }

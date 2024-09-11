@@ -15,10 +15,9 @@ import java.util.List;
 @ApplicationScoped
 public class ClientRequest {
 
-    private String name ;
-    private String email ;
-    private String phone ;
+    private String name;
+    private String email;
+    private String phone;
     List<ClientAddressRequest> addresses;
-
 
 }

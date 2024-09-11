@@ -30,9 +30,6 @@ public class Cart extends PanacheEntityBase {
 
     private BigDecimal totalAmount;
 
-
-    // ENUM, DRAFT, ON_DELIVERY, DELIVERED
-    //Default value is DRAFT
     @Enumerated(EnumType.STRING)
     private CartStatus status;
 
@@ -46,11 +43,10 @@ public class Cart extends PanacheEntityBase {
     @JsonManagedReference
     @JoinTable(
             name = "cart_item",
-            joinColumns = @JoinColumn(name = "cart_id", referencedColumnName = "id" ),
+            joinColumns = @JoinColumn(name = "cart_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id")
     )
     private List<Item> items;
-
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -59,15 +55,13 @@ public class Cart extends PanacheEntityBase {
 
     @ManyToOne
     @JoinColumn(name = "shop_id")
-    @JsonBackReference(value="shop-cart-ref")
+    @JsonBackReference(value = "shop-cart-ref")
     private Shop shop;
-
 
 
     @OneToOne(mappedBy = "cart", cascade = CascadeType.ALL)
     @JsonBackReference(value = "cart-order-ref")
     private Order order;
-
 
 
     public Cart() {

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-public class ClientAddress extends Address{
+public class ClientAddress extends Address {
 
 
     private boolean isDefault;
@@ -19,7 +19,6 @@ public class ClientAddress extends Address{
     @JoinColumn(name = "client_id")
     @JsonBackReference(value = "client-client-address-ref")
     private Client client;
-
 
 
 }

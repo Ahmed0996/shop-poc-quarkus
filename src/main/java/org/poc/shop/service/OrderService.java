@@ -40,41 +40,41 @@ public class OrderService {
     public OrderResponse createOrder(OrderRequest orderRequest) {
 
 
-            Cart cart = cartRepository.findById(orderRequest.getCartId());
-            Order order = new Order();
-            if (cart.getStatus() == CartStatus.DRAFT) {
-                ClientAddress clientAddress = getClientDefaultAddress(cart.getClient());
-                order.setStatus(OrderStatus.DRAFT);
-                order.setCart(cart);
-                order.setAddress(convertClientToOrder(clientAddress));
-                order.setDistance(distanceCalculator(order.getAddress(), cart.getShop()));
-                order.setShop(cart.getShop());
-                orderRepository.persist(order);
-            }
-            OrderResponse orderResponse = new OrderResponse();
-            orderResponse.setId(order.getId());
-            orderResponse.setStatus(order.getStatus());
-            orderResponse.setCreatedAt(order.getCreatedAt());
-            orderResponse.setDistance(order.getDistance());
+        Cart cart = cartRepository.findById(orderRequest.getCartId());
+        Order order = new Order();
+        if (cart.getStatus() == CartStatus.DRAFT) {
+            ClientAddress clientAddress = getClientDefaultAddress(cart.getClient());
+            order.setStatus(OrderStatus.DRAFT);
+            order.setCart(cart);
+            order.setAddress(convertClientToOrder(clientAddress));
+            order.setDistance(distanceCalculator(order.getAddress(), cart.getShop()));
+            order.setShop(cart.getShop());
+            orderRepository.persist(order);
+        }
+        OrderResponse orderResponse = new OrderResponse();
+        orderResponse.setId(order.getId());
+        orderResponse.setStatus(order.getStatus());
+        orderResponse.setCreatedAt(order.getCreatedAt());
+        orderResponse.setDistance(order.getDistance());
 
-            return orderResponse;
+        return orderResponse;
     }
 
-    public Order updateOrderAddress(OrderUpdateRequest orderUpdateRequest , UUID orderId) throws IllegalAccessException {
+    public Order updateOrderAddress(OrderUpdateRequest orderUpdateRequest, UUID orderId) throws IllegalAccessException {
         Order order = orderRepository.findByIdOptional(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
         if (order.getCart().getStatus() != CartStatus.DRAFT) {
             throw new IllegalAccessException("Can not update order address because cart status is not DRAFT");
         }
-            OrderAddress orderAddress = order.getAddress();
-            orderAddress.setName(orderUpdateRequest.getName());
-            orderAddress.setShortDescription(orderUpdateRequest.getShortDescription());
-            orderAddress.setLatitude(orderUpdateRequest.getLatitude());
-            orderAddress.setLongitude(orderUpdateRequest.getLongitude());
-            order.setAddress(orderAddress);
-            orderRepository.persist(order);
+        OrderAddress orderAddress = order.getAddress();
+        orderAddress.setName(orderUpdateRequest.getName());
+        orderAddress.setShortDescription(orderUpdateRequest.getShortDescription());
+        orderAddress.setLatitude(orderUpdateRequest.getLatitude());
+        orderAddress.setLongitude(orderUpdateRequest.getLongitude());
+        order.setAddress(orderAddress);
+        orderRepository.persist(order);
 
-           return order;
+        return order;
     }
 
 
@@ -152,7 +152,7 @@ public class OrderService {
     }
 
     public List<OrderResponse> getAllOrdersByStatusAndDate(OrderStatus status, Date createdDate2) {
-        List<Order> order =  orderRepository.findAllByStatusAndCreatedDate(status, createdDate2);
+        List<Order> order = orderRepository.findAllByStatusAndCreatedDate(status, createdDate2);
         return order.stream().map(o -> new OrderResponse(o.getId(), o.getStatus(), o.getCreatedAt(), o.getDistance())).collect(Collectors.toList());
     }
 
@@ -160,45 +160,44 @@ public class OrderService {
     public OrderResponse payOrder(UUID id) throws IllegalAccessException {
         Order order = orderRepository.findByIdOptional(id)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
-        if (order.getCart().getStatus() == CartStatus.DRAFT && order.getStatus() == OrderStatus.DRAFT){
+        if (order.getCart().getStatus() == CartStatus.DRAFT && order.getStatus() == OrderStatus.DRAFT) {
             order.getCart().setStatus(CartStatus.ON_DELIVERY);
             order.setStatus(OrderStatus.PAID);
             orderRepository.persist(order);
             return new OrderResponse(order.getId(), order.getStatus(), order.getCreatedAt(), order.getDistance());
-        }
-        else {
+        } else {
             throw new IllegalAccessException("Cart or order status isn't draft");
         }
     }
 
-    public OrderAddress getOrderAddressBy(UUID orderId){
-        return  orderAddressRepository.findByOrderId(orderId) ;
+    public OrderAddress getOrderAddressBy(UUID orderId) {
+        return orderAddressRepository.findByOrderId(orderId);
     }
 
-    public List<OrderResponse> ordersDeliveryArrangement(Date deliveryDate , Long shopId) {
+    public List<OrderResponse> ordersDeliveryArrangement(Date deliveryDate, Long shopId) {
 
-        List<Order> orders =  orderRepository.getAllShopOrdersByStatusAndDate(OrderStatus.PAID , deliveryDate , shopId ) ;
-        ShopAddress shopAddress = shopRepository.findById(shopId).getAddress() ;
-        List<Map<UUID , double[]>> deliveryOrders = new ArrayList<>() ;
-        for(Order order : orders){
-            OrderAddress orderAddress = getOrderAddressBy((order.getId())) ;
-            double[] points = {orderAddress.getLatitude() ,orderAddress.getLongitude()} ;
-            Map<UUID , double[]> orderData = new HashMap<>() ;
-            orderData.put(order.getId() , points) ;
-            deliveryOrders.add(orderData) ;
+        List<Order> orders = orderRepository.getAllShopOrdersByStatusAndDate(OrderStatus.PAID, deliveryDate, shopId);
+        ShopAddress shopAddress = shopRepository.findById(shopId).getAddress();
+        List<Map<UUID, double[]>> deliveryOrders = new ArrayList<>();
+        for (Order order : orders) {
+            OrderAddress orderAddress = getOrderAddressBy((order.getId()));
+            double[] points = {orderAddress.getLatitude(), orderAddress.getLongitude()};
+            Map<UUID, double[]> orderData = new HashMap<>();
+            orderData.put(order.getId(), points);
+            deliveryOrders.add(orderData);
         }
 
 
         List<Map.Entry<UUID, double[]>> path = findShortestPath(shopAddress.getLatitude(), shopAddress.getLongitude(), deliveryOrders);
 
-        List<Order>finalOrders = new ArrayList<>() ;
-        boolean startPoint = false ;
-        for(Map.Entry<UUID, double[]> entry : path){
-            if(startPoint) {
+        List<Order> finalOrders = new ArrayList<>();
+        boolean startPoint = false;
+        for (Map.Entry<UUID, double[]> entry : path) {
+            if (startPoint) {
                 Order order = orderRepository.findById(entry.getKey());
                 finalOrders.add(order);
             }
-            startPoint = true ;
+            startPoint = true;
         }
         return finalOrders.stream().map(o -> new OrderResponse(o.getId(), o.getStatus(), o.getCreatedAt(), o.getDistance())).collect(Collectors.toList());
     }

@@ -23,31 +23,31 @@ import java.util.List;
 public class ClientResource {
 
     @Inject
-    private ClientService clientService ;
+    private ClientService clientService;
 
     private static final Logger logger = LoggerFactory.getLogger(ClientResource.class);
 
     @GET
-    public Response getAllClients(){
-        try{
-            List<ClientResponse> clients = clientService.getAllClients() ;
-            return Response.ok(clients).build() ;
-        }catch(Exception e){
-            logger.error("error while getting all clients" , e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(e.getMessage())).build() ;
+    public Response getAllClients() {
+        try {
+            List<ClientResponse> clients = clientService.getAllClients();
+            return Response.ok(clients).build();
+        } catch (Exception e) {
+            logger.error("error while getting all clients", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(e.getMessage())).build();
         }
     }
 
     @Transactional
     @POST
-    public Response createClient (ClientRequest clientRequest){
-        try{
+    public Response createClient(ClientRequest clientRequest) {
+        try {
 
-           Client client = clientService.createClient(clientRequest) ;
-            return Response.ok(client).build() ;
-        }catch(Exception e){
-            logger.error("error while saving client" , e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(e.getMessage())).build() ;
+            Client client = clientService.createClient(clientRequest);
+            return Response.ok(client).build();
+        } catch (Exception e) {
+            logger.error("error while saving client", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(e.getMessage())).build();
         }
     }
 

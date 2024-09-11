@@ -14,7 +14,7 @@ import java.math.BigInteger;
 @ApplicationScoped
 public class ItemRequest {
 
-    private Long itemId ;
-    private BigInteger quantity ;
+    private Long itemId;
+    private BigInteger quantity;
 
 }

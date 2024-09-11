@@ -9,6 +9,7 @@ import org.poc.shop.dto.response.ClientResponse;
 import org.poc.shop.entity.Client;
 import org.poc.shop.entity.ClientAddress;
 import org.poc.shop.repository.ClientRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class ClientService {
 
     public List<ClientResponse> getAllClients() {
         List<Client> clients = clientRepository.findAll().list();
-        List<ClientResponse> clientResponses = new ArrayList<>() ;
+        List<ClientResponse> clientResponses = new ArrayList<>();
         for (Client client : clients) {
             ClientResponse clientResponse = new ClientResponse();
             clientResponse.setId(client.getId());
@@ -35,24 +36,24 @@ public class ClientService {
 
     public Client createClient(ClientRequest clientRequest) {
 
-            Client client = new Client();
-            client.setName(clientRequest.getName());
-            client.setPhone(clientRequest.getPhone());
-            client.setEmail(clientRequest.getEmail());
-            List<ClientAddress> addresses = new ArrayList<>();
+        Client client = new Client();
+        client.setName(clientRequest.getName());
+        client.setPhone(clientRequest.getPhone());
+        client.setEmail(clientRequest.getEmail());
+        List<ClientAddress> addresses = new ArrayList<>();
 
-            for (ClientAddressRequest addressRequest : clientRequest.getAddresses()) {
-                ClientAddress address = new ClientAddress();
-                address.setName(addressRequest.getName());
-                address.setLongitude(addressRequest.getLongitude());
-                address.setLatitude(addressRequest.getLatitude());
-                address.setClient(client);
-                addresses.add(address);
-            }
-            client.setAddresses(addresses);
-            clientRepository.persist(client);
+        for (ClientAddressRequest addressRequest : clientRequest.getAddresses()) {
+            ClientAddress address = new ClientAddress();
+            address.setName(addressRequest.getName());
+            address.setLongitude(addressRequest.getLongitude());
+            address.setLatitude(addressRequest.getLatitude());
+            address.setClient(client);
+            addresses.add(address);
+        }
+        client.setAddresses(addresses);
+        clientRepository.persist(client);
 
-            return  client;
+        return client;
 
 
     }

@@ -22,49 +22,47 @@ import java.util.UUID;
 public class CartResource {
 
     @Inject
-    private CartService cartService ;
+    private CartService cartService;
 
     private static final Logger logger = LoggerFactory.getLogger(CartResource.class);
 
     @Transactional
     @GET
-    public Response getCarts(){
+    public Response getCarts() {
         try {
-            List<Cart> carts =  cartService.getAllCarts() ;
-            return Response.ok(carts).build() ;
-        }catch(Exception e){
-            logger.error("error while saving client" , e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build() ;
+            List<Cart> carts = cartService.getAllCarts();
+            return Response.ok(carts).build();
+        } catch (Exception e) {
+            logger.error("error while saving client", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @Transactional
     @Path("{id}")
     @GET
-    public Response getCarts(@PathParam("id") UUID id){
+    public Response getCarts(@PathParam("id") UUID id) {
         try {
-            Cart cart =  cartService.getCart(id) ;
-            return Response.ok(cart).build() ;
-        }catch(Exception e){
-            logger.error("error while saving client" , e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build() ;
+            Cart cart = cartService.getCart(id);
+            return Response.ok(cart).build();
+        } catch (Exception e) {
+            logger.error("error while saving client", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 
 
     @Transactional
     @POST
-    public Response  createCart(CartRequest cartRequest){
+    public Response createCart(CartRequest cartRequest) {
         try {
-            Cart cart =  cartService.createCart(cartRequest) ;
-            return Response.status(Response.Status.CREATED).entity(cart).build() ;
-        }catch(Exception e){
-            logger.error("error while saving cart" , e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build() ;
+            Cart cart = cartService.createCart(cartRequest);
+            return Response.status(Response.Status.CREATED).entity(cart).build();
+        } catch (Exception e) {
+            logger.error("error while saving cart", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 
 
 }

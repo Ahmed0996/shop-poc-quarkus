@@ -42,14 +42,14 @@ public class ShopResource {
 
     @GET
     @Path("/{id}/delivery")
-    public Response deliverOrders(@QueryParam("date") String date , @PathParam("id") Long shopId) {
+    public Response deliverOrders(@QueryParam("date") String date, @PathParam("id") Long shopId) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date deliveryDate = formatter.parse(date);
-            List<OrderResponse> deliveryOrders =  orderService.ordersDeliveryArrangement(deliveryDate , shopId);
+            List<OrderResponse> deliveryOrders = orderService.ordersDeliveryArrangement(deliveryDate, shopId);
             return Response.ok(deliveryOrders).build();
         } catch (Exception e) {
-            logger.info("Error while arranging delivery {}" , e.getMessage());
+            logger.info("Error while arranging delivery {}", e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }

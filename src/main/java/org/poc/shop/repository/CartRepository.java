@@ -7,6 +7,6 @@ import org.poc.shop.entity.Cart;
 import java.util.UUID;
 
 @ApplicationScoped
-public  class CartRepository implements PanacheRepositoryBase<Cart , UUID> {
+public class CartRepository implements PanacheRepositoryBase<Cart, UUID> {
 
 }

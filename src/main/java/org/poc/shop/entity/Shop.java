@@ -24,18 +24,16 @@ public class Shop extends PanacheEntityBase {
 
     private String name;
 
-
-    @OneToMany(mappedBy = "shop", orphanRemoval = false , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "shop", orphanRemoval = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "shop-order-ref")
     private List<Order> orders;
 
     @ManyToOne
     @JoinColumn(name = "shop_address_id")
-   @JsonBackReference(value = "shop-address-ref")
+    @JsonBackReference(value = "shop-address-ref")
     private ShopAddress address;
 
-
-    @OneToMany(mappedBy = "shop", orphanRemoval = false , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-    @JsonManagedReference(value="shop-cart-ref")
+    @OneToMany(mappedBy = "shop", orphanRemoval = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference(value = "shop-cart-ref")
     private List<Cart> carts;
 }

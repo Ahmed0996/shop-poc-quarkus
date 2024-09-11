@@ -21,38 +21,38 @@ public class ShopService {
     @Transactional
     public Shop createShop(Shop shop) {
 
-            shopRepository.persist(shop);
-            return shop;
+        shopRepository.persist(shop);
+        return shop;
 
     }
 
     public Shop getShopById(Long id) {
 
-            return shopRepository.findById(id);
+        return shopRepository.findById(id);
 
     }
 
 
     public Shop updateShop(Long id, Shop updatedShop) {
 
-            Shop shop = shopRepository.findById(id);
-            if (shop == null) {
-                throw new EntityNotFoundException("Shop not found");
-            }
-            shop.setName(updatedShop.getName());
-            shop.setAddress(updatedShop.getAddress());
-            shopRepository.persist(shop);
-            return shop;
+        Shop shop = shopRepository.findById(id);
+        if (shop == null) {
+            throw new EntityNotFoundException("Shop not found");
+        }
+        shop.setName(updatedShop.getName());
+        shop.setAddress(updatedShop.getAddress());
+        shopRepository.persist(shop);
+        return shop;
 
     }
 
 
     public void deleteShop(Long id) {
-            Shop shop = shopRepository.findById(id);
-            if (shop == null) {
-                throw new EntityNotFoundException("Shop not found");
-            }
-            shopRepository.delete(shop);
+        Shop shop = shopRepository.findById(id);
+        if (shop == null) {
+            throw new EntityNotFoundException("Shop not found");
+        }
+        shopRepository.delete(shop);
     }
 
     public List<Shop> getAllShops() {

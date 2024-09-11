@@ -16,12 +16,13 @@ import org.poc.shop.enums.OrderStatus;
 import org.poc.shop.repository.OrderRepository;
 import org.poc.shop.service.OrderService;
 import org.poc.shop.utils.ErrorMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 @Path("/orders")
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,14 +36,14 @@ public class OrderResource {
     @Inject
     OrderRepository orderRepository;
 
-    Logger logger = Logger.getLogger(OrderResource.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(OrderResource.class);
 
     @GET
     public Response getAllOrders() {
         try {
             List<OrderResponse> orders = orderService.getAllOrders();
             return Response.ok(orders).build();
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             logger.info("error while getting all orders :" + e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(e.getMessage())).build();
 
@@ -53,18 +54,18 @@ public class OrderResource {
     @Path("/filter")
     public Response getAllOrdersByStatusAndDate(@QueryParam("status") OrderStatus status, @QueryParam("date") String date) {
         try {
-            if(date == null){
-                List<OrderResponse> orders =  orderService.getAllOrdersByStatus(status);
+            if (date == null) {
+                List<OrderResponse> orders = orderService.getAllOrdersByStatus(status);
                 return Response.ok(orders).build();
-            }else if(status == null){
+            } else if (status == null) {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 Date deliveryDate = formatter.parse(date);
-                List<OrderResponse> orders =  orderService.getAllOrdersByDate(deliveryDate);
+                List<OrderResponse> orders = orderService.getAllOrdersByDate(deliveryDate);
                 return Response.ok(orders).build();
             }
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date deliveryDate = formatter.parse(date);
-            List<OrderResponse> orders =  orderService.getAllOrdersByStatusAndDate(status, deliveryDate);
+            List<OrderResponse> orders = orderService.getAllOrdersByStatusAndDate(status, deliveryDate);
             return Response.ok(orders).build();
         } catch (Exception e) {
             logger.info("error while filtring orders :" + e.getMessage());
@@ -78,9 +79,9 @@ public class OrderResource {
     @Path("/{id}")
     public Response getOrderById(@PathParam("id") UUID id) {
         try {
-            Order order =  orderRepository.findById(id);
+            Order order = orderRepository.findById(id);
             return Response.ok(order).build();
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             logger.info("error while getting order by id :" + e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(e.getMessage())).build();
 
@@ -94,12 +95,11 @@ public class OrderResource {
 
             OrderResponse orderResponse = orderService.createOrder(order);
             return Response.status(Response.Status.CREATED).entity(orderResponse).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.info("Error while creating order" + e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(e.getMessage())).build();
         }
     }
-
 
 
     @DELETE
@@ -115,7 +115,7 @@ public class OrderResource {
 
             order.delete();
             return Response.status(Response.Status.NO_CONTENT).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.info("Error while deleting order" + e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(e.getMessage())).build();
         }
@@ -126,9 +126,9 @@ public class OrderResource {
     @Transactional
     public Response payOrder(@PathParam("id") UUID id) {
         try {
-            OrderResponse order =  orderService.payOrder(id);
+            OrderResponse order = orderService.payOrder(id);
             return Response.ok(order).build();
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.info("Error while paying " + e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(e.getMessage())).build();
         }
@@ -138,11 +138,11 @@ public class OrderResource {
     @PUT
     @Path("/{id}")
     @Transactional
-    public Response updateOrderAddress(OrderUpdateRequest orderUpdateRequest , @PathParam("id") UUID orderId) {
+    public Response updateOrderAddress(OrderUpdateRequest orderUpdateRequest, @PathParam("id") UUID orderId) {
         try {
-            return Response.ok(orderService.updateOrderAddress(orderUpdateRequest , orderId)).build();
-        }catch (Exception e){
-            logger.info("Error while updating order adddress" + e.getMessage()) ;
+            return Response.ok(orderService.updateOrderAddress(orderUpdateRequest, orderId)).build();
+        } catch (Exception e) {
+            logger.info("Error while updating order adddress" + e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(e.getMessage())).build();
 
         }

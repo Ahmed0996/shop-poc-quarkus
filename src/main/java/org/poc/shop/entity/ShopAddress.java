@@ -17,7 +17,7 @@ import java.util.List;
 public class ShopAddress extends Address {
 
 
-    @OneToMany(mappedBy = "address" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "shop-address-ref")
     private List<Shop> shop;
 

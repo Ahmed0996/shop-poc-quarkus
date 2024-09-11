@@ -15,13 +15,10 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @ApplicationScoped
 public class ItemResponse {
+
     private Long id;
-
     private String name;
-
     private String description;
-
     private BigInteger quantity;
-
     private BigDecimal price;
 }

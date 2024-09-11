@@ -15,7 +15,6 @@ import lombok.Setter;
 import java.util.List;
 
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -24,14 +23,14 @@ import java.util.List;
 public class OrderAddress extends Address {
 
 
-    @OneToMany(mappedBy = "address" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "order-address-ref")
-    private List<Order> order ;
+    private List<Order> order;
 
     public OrderAddress(Long id, Double latitude, Double longitude) {
-            setId(id);
-            setLatitude(latitude);
-            setLongitude(longitude);
+        setId(id);
+        setLatitude(latitude);
+        setLongitude(longitude);
     }
 
 
@@ -43,5 +42,5 @@ public class OrderAddress extends Address {
         setShortDescription(clientAddress.getShortDescription());
 
 
-}
     }
+}

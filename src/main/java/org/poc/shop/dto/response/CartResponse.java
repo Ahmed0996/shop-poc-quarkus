@@ -11,6 +11,7 @@ import org.poc.shop.entity.Item;
 import org.poc.shop.entity.Order;
 import org.poc.shop.entity.Shop;
 import org.poc.shop.enums.CartStatus;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,20 +25,12 @@ import java.util.UUID;
 public class CartResponse {
 
     private UUID id;
-
     private BigDecimal totalAmount;
-
     private CartStatus status;
-
     private LocalDateTime createdDate;
-
     private LocalDateTime updateTimestamp;
-
     private List<Item> items;
-
     private Client client;
-
     private Shop shop;
-
     private Order order;
 }

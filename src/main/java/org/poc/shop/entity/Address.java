@@ -23,6 +23,7 @@ public abstract class Address extends PanacheEntityBase
     private String shortDescription;
 
     private double latitude;
+
     private double longitude;
 
 }

@@ -41,7 +41,7 @@ public class OrderAddressRepository implements PanacheRepository<OrderAddress> {
         }
     }
 
-    public OrderAddress findByOrderId(UUID orderId){
+    public OrderAddress findByOrderId(UUID orderId) {
         return find("SELECT o.address FROM Order o WHERE o.id = ?1", orderId).firstResult();
     }
 }
